@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "kerykeion"
-version = "4.19.0"
-authors = ["Giacomo Battaglia <kerykeion.astrology@gmail.com>"]
+name = "kerykeion-json"
+version = "1.0.0"
+authors = ["Giacomo Battaglia <kerykeion.astrology@gmail.com>","Ugur Atakan Surmeli <uguratakansurmeli@gmail.com>"]
 description = "A python library for astrology."
 license = "AGPL-3.0"
 homepage = "https://www.kerykeion.net/"
-repository = "https://github.com/g-battaglia/kerykeion"
+repository = "https://github.com/Ugur-Atakan/kerykeion-json"
 keywords = [
     "astrology",
     "ephemeris",

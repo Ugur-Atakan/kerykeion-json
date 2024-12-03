@@ -1,88 +1,77 @@
 from kerykeion import AstrologicalSubject
-from terminaltables import AsciiTable
 from kerykeion.utilities import get_houses_list, get_available_planets_list
 from typing import Union
 from kerykeion.kr_types.kr_models import AstrologicalSubjectModel
+import json
+
 
 class Report:
     """
-    Create a report for a Kerykeion instance.
+    Create a report for a Kerykeion instance in JSON format.
     """
-
-    report_title: str
-    data_table: str
-    planets_table: str
-    houses_table: str
 
     def __init__(self, instance: Union[AstrologicalSubject, AstrologicalSubjectModel]):
         self.instance = instance
 
-        self.get_report_title()
-        self.get_data_table()
-        self.get_planets_table()
-        self.get_houses_table()
+    def get_report_title(self) -> str:
+        return f"Kerykeion report for {self.instance.name}"
 
-    def get_report_title(self) -> None:
-        self.report_title = f"\n+- Kerykeion report for {self.instance.name} -+"
-
-    def get_data_table(self) -> None:
+    def get_data(self) -> dict:
         """
-        Creates the data table of the report.
+        Creates the main data section of the report.
         """
+        return {
+            "date": f"{self.instance.day}/{self.instance.month}/{self.instance.year}",
+            "time": f"{self.instance.hour}:{self.instance.minute}",
+            "location": f"{self.instance.city}, {self.instance.nation}",
+            "longitude": self.instance.lng,
+            "latitude": self.instance.lat,
+        }
 
-        main_data = [["Date", "Time", "Location", "Longitude", "Latitude"]] + [
-            [
-                f"{self.instance.day}/{self.instance.month}/{self.instance.year}",
-                f"{self.instance.hour}:{self.instance.minute}",
-                f"{self.instance.city}, {self.instance.nation}",
-                self.instance.lng,
-                self.instance.lat,
-            ]
-        ]
-        self.data_table = AsciiTable(main_data).table
-
-    def get_planets_table(self) -> None:
+    def get_planets_data(self) -> list:
         """
-        Creates the planets table.
+        Creates the planets section of the report.
         """
-
-        planets_data = [["Planet", "Sign", "Pos.", "Ret.", "House"]] + [
-            [
-                planet.name,
-                planet.sign,
-                round(float(planet.position), 2),
-                ("R" if planet.retrograde else "-"),
-                planet.house,
-            ]
+        return [
+            {
+                "planet": planet.name,
+                "sign": planet.sign,
+                "position": round(float(planet.position), 2),
+                "retrograde": planet.retrograde,
+                "house": planet.house,
+            }
             for planet in get_available_planets_list(self.instance)
         ]
 
-        self.planets_table = AsciiTable(planets_data).table
-
-    def get_houses_table(self) -> None:
+    def get_houses_data(self) -> list:
         """
-        Creates the houses table.
+        Creates the houses section of the report.
         """
-
-        houses_data = [["House", "Sign", "Position"]] + [
-            [house.name, house.sign, round(float(house.position), 2)] for house in get_houses_list(self.instance)
+        return [
+            {
+                "house": house.name,
+                "sign": house.sign,
+                "position": round(float(house.position), 2),
+            }
+            for house in get_houses_list(self.instance)
         ]
 
-        self.houses_table = AsciiTable(houses_data).table
-
-    def get_full_report(self) -> str:
+    def get_full_report(self) -> dict:
         """
-        Returns the full report.
+        Returns the full report in JSON format.
         """
-
-        return f"{self.report_title}\n{self.data_table}\n{self.planets_table}\n{self.houses_table}"
+        return {
+            "title": self.get_report_title(),
+            "data": self.get_data(),
+            "planets": self.get_planets_data(),
+            "houses": self.get_houses_data(),
+        }
 
     def print_report(self) -> None:
         """
-        Print the report.
+        Prints the JSON report.
         """
-
-        print(self.get_full_report())
+        print(json.dumps(self.get_full_report(), indent=4))
 
 
 if __name__ == "__main__":

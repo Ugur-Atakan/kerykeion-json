@@ -41,13 +41,8 @@ DEFAULT_HOUSES_SYSTEM_IDENTIFIER: HousesSystemIdentifier = "P"
 DEFAULT_ZODIAC_TYPE: ZodiacType = "Tropic"
 DEFAULT_PERSPECTIVE_TYPE: PerspectiveType = "Apparent Geocentric"
 GEONAMES_DEFAULT_USERNAME_WARNING = (
-    "\n********\n"
     "NO GEONAMES USERNAME SET!\n"
-    "Using the default geonames username is not recommended, please set a custom one!\n"
-    "You can get one for free here:\n"
-    "https://www.geonames.org/login\n"
-    "Keep in mind that the default username is limited to 2000 requests per hour and is shared with everyone else using this library.\n"
-    "********"
+    "https://www.geonames.org/login\ default username is limited to 2000 requests per hour.\n"
 )
 
 NOW = datetime.now()
